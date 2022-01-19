@@ -6,27 +6,27 @@ import { Users, UsersDocument } from "./users.schema";
 @Injectable()
 export class UsersService {
   constructor(
-    @InjectModel(Users.name) private accountModel: Model<UsersDocument>,
+    @InjectModel(Users.name) private usersModel: Model<UsersDocument>,
   ) {
   }
 
-  create(email: string, password: string, totpSecret: string) {
-    return this.accountModel.create({
+  create(email: string, hashedPassword: string, totpSecret: string) {
+    return this.usersModel.create({
       email,
-      password,
+      hashedPassword,
       totpSecret
     });
   }
 
   getById(id: string) {
-    return this.accountModel.findById(id);
+    return this.usersModel.findById(id);
   }
 
   getByEmail(email: string) {
-    return this.accountModel.findOne({ email });
+    return this.usersModel.findOne({ email });
   }
 
   deleteAccount(id: string) {
-    return this.accountModel.deleteOne({ _id: id });
+    return this.usersModel.deleteOne({ _id: id });
   }
 }

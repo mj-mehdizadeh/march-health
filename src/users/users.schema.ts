@@ -12,7 +12,7 @@ export class Users {
   email: string;
 
   @Prop()
-  password: string;
+  hashedPassword: string;
 
   @Prop({ required: true })
   totpSecret: string;
