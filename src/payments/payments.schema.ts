@@ -1,6 +1,6 @@
 import { Prop, Schema, SchemaFactory } from '@nestjs/mongoose';
-import { Document } from 'mongoose';
-import { UsersStatus, UsersType } from './users.type';
+import { Document, ObjectId, Schema as MongooseSchema } from 'mongoose';
+import { PaymentsStatus } from './payments.type';
 
 export type PaymentsDocument = Payments & Document;
 
@@ -8,20 +8,17 @@ export type PaymentsDocument = Payments & Document;
   timestamps: true,
 })
 export class Payments {
-  @Prop({ required: true, unique: true })
-  email: string;
+  @Prop({ type: MongooseSchema.Types.ObjectId })
+  userId: ObjectId;
 
   @Prop()
-  hashedPassword: string;
+  plan: string;
 
-  @Prop({ required: true })
-  totpSecret: string;
+  @Prop()
+  code: string;
 
-  @Prop({ required: true, enum: UsersType, default: UsersType.USER })
-  role: UsersType;
-
-  @Prop({ default: UsersStatus.ACTIVE, enum: UsersStatus })
-  status: UsersStatus;
+  @Prop({ default: PaymentsStatus.NEW, enum: PaymentsStatus })
+  status: PaymentsStatus;
 }
 
 export const PaymentsSchema = SchemaFactory.createForClass(Payments);

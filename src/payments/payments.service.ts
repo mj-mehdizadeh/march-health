@@ -1,26 +1,39 @@
-import { Injectable } from '@nestjs/common';
-import { CreatePaymentDto } from './dto/create-payment.dto';
+import { Injectable, Req } from '@nestjs/common';
 import { UpdatePaymentDto } from './dto/update-payment.dto';
+import { InjectModel } from '@nestjs/mongoose';
+import { FilterQuery, Model } from 'mongoose';
+import { Payments, PaymentsDocument } from './payments.schema';
 
 @Injectable()
 export class PaymentsService {
-  create(createPaymentDto: CreatePaymentDto) {
-    return 'This action adds a new payment';
+  constructor(
+    @InjectModel(Payments.name) private paymentsModel: Model<PaymentsDocument>,
+  ) {}
+
+  create(createPaymentDto: { userId: string; plan: string }) {
+    return this.paymentsModel.create({
+      ...createPaymentDto,
+      code: Math.floor(Math.random() * 10000),
+    });
   }
 
-  findAll() {
-    return `This action returns all payments`;
+  findAll(query: { userId?: string }) {
+    const filter: FilterQuery<Payments> = {};
+    if (query.userId) filter.userId = query.userId;
+    return this.paymentsModel.find(filter);
   }
 
   findOne(id: number) {
-    return `This action returns a #${id} payment`;
+    return this.paymentsModel.findById(id);
   }
 
   update(id: number, updatePaymentDto: UpdatePaymentDto) {
-    return `This action updates a #${id} payment`;
+    return this.paymentsModel.findByIdAndUpdate(id, updatePaymentDto, {
+      new: true,
+    });
   }
 
   remove(id: number) {
-    return `This action removes a #${id} payment`;
+    return this.paymentsModel.deleteOne({ _id: id });
   }
 }
