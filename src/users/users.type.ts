@@ -3,7 +3,7 @@ export enum UsersStatus {
   DELETED = 'DELETED',
 }
 
-export enum UsersType {
+export enum UsersRole {
   USER = 'USER',
   ADMIN = 'ADMIN',
 }

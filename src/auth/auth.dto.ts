@@ -1,4 +1,11 @@
 import { ApiProperty } from '@nestjs/swagger';
+import { UsersStatus, UsersRole } from '../users/users.type';
+
+export class AuthUser {
+  id: string;
+  status: UsersStatus;
+  role: UsersRole;
+}
 
 export class RegisterDto {
   @ApiProperty({ example: 'test@mail.com' })
