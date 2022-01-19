@@ -12,6 +12,6 @@ import { MailModule } from './mail/mail.module';
     MongoModule,
     MailModule,
   ],
-  exports: [ConfigModule],
+  exports: [ConfigModule, MailModule],
 })
 export class BootstrapModule {}

@@ -9,15 +9,12 @@ export class MailService {
     private readonly mailerService: MailerService,
   ) {}
 
-  async sendLogs(logs: any) {
+  async sendOtpCode(to: string, code: string) {
     await this.mailerService.sendMail({
-      to: this.configService.get('LOG_MAIL_ADDRESS'),
-      subject: 'Service Log',
-      template: './logs',
-      context: {
-        date: new Date(),
-        logs: JSON.stringify(logs),
-      },
+      to: to,
+      subject: 'Otp Code For March-Health',
+      template: 'two-step-code',
+      context: { code },
     });
   }
 }

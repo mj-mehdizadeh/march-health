@@ -4,6 +4,7 @@ import { TotpService } from './totp/totp.service';
 import { JwtService } from '@nestjs/jwt';
 import { UsersDocument } from '../users/users.schema';
 import { UsersStatus } from '../users/users.type';
+import { ConfigService } from '@nestjs/config';
 
 // eslint-disable-next-line @typescript-eslint/no-var-requires
 const bcrypt = require('bcrypt');
@@ -14,6 +15,7 @@ export class AuthService {
     private usersService: UsersService,
     private totpService: TotpService,
     private jwtService: JwtService,
+    private configService: ConfigService,
   ) {}
 
   async registerUser(email: string, password: string) {
@@ -30,8 +32,7 @@ export class AuthService {
       user.status === UsersStatus.ACTIVE &&
       (await bcrypt.compare(password, user.hashedPassword))
     ) {
-      const { hashedPassword, ...result } = user;
-      return result;
+      return user;
     }
     return null;
   }
@@ -47,7 +48,10 @@ export class AuthService {
   async login(user: UsersDocument) {
     const payload = { email: user.email, sub: user.id, role: user.role };
     return {
-      access_token: this.jwtService.sign(payload),
+      access_token: this.jwtService.sign(payload, {
+        expiresIn: this.configService.get('JWT_EXPIRE_IN') || '15m',
+        secret: this.configService.get('JWT_SECRET'),
+      }),
     };
   }
 }
