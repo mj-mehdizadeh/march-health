@@ -13,3 +13,17 @@ export class SendCodeDto {
   @ApiProperty()
   password: string;
 }
+
+export class LoginDto {
+  @ApiProperty()
+  email: string;
+  @ApiProperty()
+  password: string;
+  @ApiProperty()
+  totp: string;
+}
+
+export class LoginResponseDto {
+  @ApiProperty()
+  access_token: string;
+}
