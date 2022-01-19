@@ -1,11 +1,13 @@
 import { Prop, Schema, SchemaFactory } from '@nestjs/mongoose';
 import { Document, ObjectId, Schema as MongooseSchema } from 'mongoose';
 import { PaymentsStatus } from './payments.type';
+import { toJSON } from '../common/lib/schema';
 
 export type PaymentsDocument = Payments & Document;
 
 @Schema({
   timestamps: true,
+  toJSON,
 })
 export class Payments {
   @Prop({ type: MongooseSchema.Types.ObjectId })
@@ -13,6 +15,9 @@ export class Payments {
 
   @Prop()
   plan: string;
+
+  @Prop()
+  paymentUrl: string;
 
   @Prop()
   code: string;

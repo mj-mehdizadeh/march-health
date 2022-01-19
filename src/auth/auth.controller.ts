@@ -7,7 +7,7 @@ import {
   UsePipes,
 } from '@nestjs/common';
 import { AuthService } from './auth.service';
-import { ApiResponse } from '@nestjs/swagger';
+import { ApiResponse, ApiTags } from '@nestjs/swagger';
 import { loginBodyJoi, registerBodyJoi, sendCodeBodyJoi } from './auth.joi';
 import {
   LoginDto,
@@ -17,6 +17,7 @@ import {
 } from './auth.dto';
 import { MailService } from '../bootstrap/mail/mail.service';
 
+@ApiTags('auth')
 @Controller('auth')
 export class AuthController {
   constructor(

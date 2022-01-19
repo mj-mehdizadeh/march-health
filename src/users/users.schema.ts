@@ -1,11 +1,13 @@
 import { Prop, Schema, SchemaFactory } from '@nestjs/mongoose';
 import { Document } from 'mongoose';
 import { UsersStatus, UsersRole } from './users.type';
+import { toJSON } from '../common/lib/schema';
 
 export type UsersDocument = Users & Document;
 
 @Schema({
   timestamps: true,
+  toJSON,
 })
 export class Users {
   @Prop({ required: true, unique: true })

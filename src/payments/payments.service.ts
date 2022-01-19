@@ -3,17 +3,21 @@ import { UpdatePaymentDto } from './dto/update-payment.dto';
 import { InjectModel } from '@nestjs/mongoose';
 import { FilterQuery, Model } from 'mongoose';
 import { Payments, PaymentsDocument } from './payments.schema';
+import { ConfigService } from '@nestjs/config';
 
 @Injectable()
 export class PaymentsService {
   constructor(
     @InjectModel(Payments.name) private paymentsModel: Model<PaymentsDocument>,
+    private configService: ConfigService,
   ) {}
 
   create(createPaymentDto: { userId: string; plan: string }) {
+    const code = Math.floor(Math.random() * 10000);
     return this.paymentsModel.create({
       ...createPaymentDto,
-      code: Math.floor(Math.random() * 10000),
+      code,
+      paymentUrl: `${this.configService.get('PAYMENT_BASE_URL')}/${code}`,
     });
   }
 
@@ -23,11 +27,11 @@ export class PaymentsService {
     return this.paymentsModel.find(filter);
   }
 
-  findOne(id: number) {
-    return this.paymentsModel.findById(id);
+  findOne(id: string, userId: string) {
+    return this.paymentsModel.findOne({ _id: id, userId });
   }
 
-  update(id: number, updatePaymentDto: UpdatePaymentDto) {
+  update(id: string, userId: string, updatePaymentDto: UpdatePaymentDto) {
     return this.paymentsModel.findByIdAndUpdate(id, updatePaymentDto, {
       new: true,
     });
