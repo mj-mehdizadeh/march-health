@@ -1,11 +1,11 @@
-import { Prop, Schema, SchemaFactory } from "@nestjs/mongoose";
-import { Document } from "mongoose";
-import { UsersStatus, UsersType } from "./users.type";
+import { Prop, Schema, SchemaFactory } from '@nestjs/mongoose';
+import { Document } from 'mongoose';
+import { UsersStatus, UsersType } from './users.type';
 
 export type UsersDocument = Users & Document;
 
 @Schema({
-  timestamps: true
+  timestamps: true,
 })
 export class Users {
   @Prop({ required: true, unique: true })

@@ -1,6 +1,6 @@
-import { Injectable } from "@nestjs/common";
-import { authenticator, totp } from "otplib";
-import { HashAlgorithms } from "@otplib/core";
+import { Injectable } from '@nestjs/common';
+import { authenticator, totp } from 'otplib';
+import { HashAlgorithms } from '@otplib/core';
 
 @Injectable()
 export class TotpService {
@@ -9,7 +9,7 @@ export class TotpService {
       algorithm: HashAlgorithms.SHA256,
       digits: 6,
       step: 60,
-      window: [1, 0]
+      window: [1, 0],
     };
   }
 
@@ -24,7 +24,7 @@ export class TotpService {
   verify(secret: string, token) {
     return totp.verify({
       secret,
-      token
+      token,
     });
   }
 }
