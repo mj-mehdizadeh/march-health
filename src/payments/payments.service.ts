@@ -27,17 +27,25 @@ export class PaymentsService {
     return this.paymentsModel.find(filter);
   }
 
-  findOne(id: string, userId: string) {
-    return this.paymentsModel.findOne({ _id: id, userId });
+  findOne(id: string, filter?: { userId?: string }) {
+    return this.paymentsModel.findOne({ _id: id, ...filter });
   }
 
-  update(id: string, userId: string, updatePaymentDto: UpdatePaymentDto) {
-    return this.paymentsModel.findByIdAndUpdate(id, updatePaymentDto, {
-      new: true,
-    });
+  update(
+    id: string,
+    filter: { userId?: string },
+    updatePaymentDto: UpdatePaymentDto,
+  ) {
+    return this.paymentsModel.findOneAndUpdate(
+      { _id: id, ...filter },
+      updatePaymentDto,
+      {
+        new: true,
+      },
+    );
   }
 
-  remove(id: number) {
-    return this.paymentsModel.deleteOne({ _id: id });
+  remove(id: string, filter?: { userId?: string }) {
+    return this.paymentsModel.deleteOne({ _id: id, ...filter });
   }
 }

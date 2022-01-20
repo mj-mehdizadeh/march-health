@@ -1,4 +1,13 @@
-import { PartialType } from '@nestjs/swagger';
-import { PaymentDto } from './payment.dto';
+import { ApiProperty } from '@nestjs/swagger';
+import { PaymentsStatus } from '../payments.type';
 
-export class UpdatePaymentDto extends PartialType(PaymentDto) {}
+export class UpdatePaymentDto {
+  @ApiProperty({ enum: PaymentsStatus })
+  status: PaymentsStatus;
+  @ApiProperty()
+  code: string;
+  @ApiProperty()
+  plan: string;
+  @ApiProperty()
+  paymentUrl: string;
+}

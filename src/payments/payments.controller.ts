@@ -8,6 +8,7 @@ import {
   Delete,
   Req,
   UseGuards,
+  UsePipes,
 } from '@nestjs/common';
 import { PaymentsService } from './payments.service';
 import { CreatePaymentDto } from './dto/create-payment.dto';
@@ -15,6 +16,7 @@ import { UpdatePaymentDto } from './dto/update-payment.dto';
 import { ApiBearerAuth, ApiResponse, ApiTags } from '@nestjs/swagger';
 import { JwtAuthGuard } from '../auth/jwt/jwt-auth.guard';
 import { PaymentDto } from './dto/payment.dto';
+import { requiredObjectIdParamJoiPipe } from '../common/lib/joi';
 
 @ApiTags('payments')
 @Controller('payments')
@@ -39,22 +41,29 @@ export class PaymentsController {
   }
 
   @Get(':id')
+  @UsePipes(requiredObjectIdParamJoiPipe)
   @ApiResponse({ status: 200, type: PaymentDto })
   findOne(@Param('id') id: string, @Req() req) {
-    return this.paymentsService.findOne(id, req.user.id);
+    return this.paymentsService.findOne(id, { userId: req.user.id });
   }
 
   @Patch(':id')
+  @UsePipes(requiredObjectIdParamJoiPipe)
   update(
     @Param('id') id: string,
     @Body() updatePaymentDto: UpdatePaymentDto,
     @Req() req,
   ) {
-    return this.paymentsService.update(id, req.user.id, updatePaymentDto);
+    return this.paymentsService.update(
+      id,
+      { userId: req.user.id },
+      updatePaymentDto,
+    );
   }
 
   @Delete(':id')
-  remove(@Param('id') id: string) {
-    return this.paymentsService.remove(+id);
+  @UsePipes(requiredObjectIdParamJoiPipe)
+  async remove(@Param('id') id: string, @Req() req) {
+    await this.paymentsService.remove(id, { userId: req.user.id });
   }
 }
