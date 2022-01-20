@@ -15,10 +15,13 @@ import { PaymentsService } from '../payments.service';
 import { PaymentDto } from '../dto/payment.dto';
 import { requiredObjectIdParamJoiPipe } from '../../common/lib/joi';
 import { UpdatePaymentDto } from '../dto/update-payment.dto';
+import { Roles } from '../../auth/decorator/acesses.decorator';
+import { UsersRole } from '../../users/users.type';
 
 @ApiTags('admin/payments')
 @Controller('admin/payments')
 @ApiBearerAuth()
+@Roles(UsersRole.ADMIN)
 @UseGuards(JwtAuthGuard)
 export class AdminController {
   constructor(private readonly paymentsService: PaymentsService) {}
